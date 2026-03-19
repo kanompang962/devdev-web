@@ -1,0 +1,35 @@
+.shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  height: 100vh;
+  overflow: hidden; // ← ป้องกัน shell scroll
+  transition: grid-template-columns 0.25s ease;
+
+  &--collapsed {
+    grid-template-columns: 64px 1fr;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: hidden;
+    background: var(--color-background);
+  }
+
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  .shell {
+    grid-template-columns: 0 1fr;
+
+    &--collapsed {
+      grid-template-columns: 260px 1fr;
+    }
+  }
+}

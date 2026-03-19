@@ -1,0 +1,45 @@
+<div class="activity-feed">
+  <h3 class="activity-feed__title">กิจกรรมล่าสุด</h3>
+
+  @if (loading()) {
+    <div class="activity-feed__loading">
+      @for (i of [1,2,3,4,5]; track i) {
+        <div class="skeleton-row">
+          <div class="skeleton skeleton--avatar"></div>
+          <div class="skeleton-row__lines">
+            <div class="skeleton skeleton--line"></div>
+            <div class="skeleton skeleton--line skeleton--line-sm"></div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (activities().length === 0) {
+    <div class="activity-feed__empty">
+      <span>📭</span>
+      <p>ยังไม่มีกิจกรรม</p>
+    </div>
+  } @else {
+    <ul class="activity-feed__list">
+      @for (item of activities(); track item.id) {
+        <li class="activity-item">
+          <div class="activity-item__avatar">
+            @if (item.avatar) {
+              <img [src]="item.avatar" [alt]="item.user" />
+            } @else {
+              <span>{{ initials(item.user) }}</span>
+            }
+          </div>
+          <div class="activity-item__content">
+            <p class="activity-item__text">
+              <strong>{{ item.user }}</strong> {{ item.action }}
+              <span class="activity-item__target">{{ item.target }}</span>
+            </p>
+            <time class="activity-item__time">
+              {{ item.createdAt | timeAgo }}
+            </time>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</div>

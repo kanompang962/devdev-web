@@ -1,0 +1,122 @@
+<div class="users-list">
+
+  <!-- Header -->
+  <div class="users-list__header">
+    <div>
+      <h1 class="users-list__title">จัดการผู้ใช้งาน</h1>
+      <p class="users-list__subtitle">
+        ทั้งหมด {{ store.total() }} คน · ใช้งานอยู่ N/A คน
+        <!-- ทั้งหมด {{ store.total() }} คน · ใช้งานอยู่ {{ store.activeUsers() }} คน -->
+      </p>
+    </div>
+    @if (canManage) {
+      <a routerLink="create" class="btn btn--primary">+ เพิ่มผู้ใช้งาน</a>
+    }
+  </div>
+
+  <!-- Search -->
+  <div class="users-list__toolbar">
+    <div class="search-box">
+      <span class="search-box__icon">🔍</span>
+      <input
+        type="text"
+        class="search-box__input"
+        placeholder="ค้นหาชื่อ, อีเมล..."
+        [value]="searchQuery()"
+        (input)="onSearch($any($event.target).value)"
+      />
+    </div>
+  </div>
+
+  <!-- Table -->
+  @if (store.loading()) {
+    <div class="users-list__loading">
+      <app-spinner size="lg" />
+    </div>
+  } @else if (store.isEmpty()) {
+    <div class="users-list__empty">
+      <span>👥</span>
+      <p>ไม่พบผู้ใช้งาน</p>
+    </div>
+  } @else {
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ผู้ใช้งาน</th>
+            <th>แผนก</th>
+            <th>บทบาท</th>
+            <th>สถานะ</th>
+            <th>เข้าสู่ระบบล่าสุด</th>
+            @if (canManage) { <th>จัดการ</th> }
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of store.users(); track user.id) {
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <div class="user-cell__avatar">
+                    {{ user.firstName[0] }}{{ user.lastName[0] }}
+                  </div>
+                  <div>
+                    <p class="user-cell__name">{{ user.name }}</p>
+                    <p class="user-cell__email">{{ user.email }}</p>
+                  </div>
+                </div>
+              </td>
+              <td>{{ user.department ?? '—' }}</td>
+              <td>{{ user.role }}</td>
+              <td>
+                <app-badge [variant]="STATUS_VARIANT[user.status]" [dot]="true">
+                  {{ STATUS_LABEL[user.status] }}
+                </app-badge>
+              </td>
+              <td>{{ user.lastLoginAt ? (user.lastLoginAt | slice:0:10) : '—' }}</td>
+              @if (canManage) {
+                <td>
+                  <div class="action-group">
+                    <a [routerLink]="[user.id]" class="btn btn--ghost btn--sm">ดู</a>
+                    <a [routerLink]="[user.id, 'edit']" class="btn btn--secondary btn--sm">แก้ไข</a>
+                    <button
+                      class="btn btn--danger btn--sm"
+                      [disabled]="deletingId() === user.id"
+                      (click)="onDelete(user)"
+                    >
+                      @if (deletingId() === user.id) { กำลังลบ... } @else { ลบ }
+                    </button>
+                  </div>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (store.totalPages() > 1) {
+      <div class="pagination">
+        <button
+          class="pagination__btn"
+          [disabled]="store.page() === 1"
+          (click)="onPageChange(store.page() - 1)"
+        >← ก่อนหน้า</button>
+
+        @for (p of pages; track p) {
+          <button
+            class="pagination__btn"
+            [class.pagination__btn--active]="p === store.page()"
+            (click)="onPageChange(p)"
+          >{{ p }}</button>
+        }
+
+        <button
+          class="pagination__btn"
+          [disabled]="store.page() === store.totalPages()"
+          (click)="onPageChange(store.page() + 1)"
+        >ถัดไป →</button>
+      </div>
+    }
+  }
+</div>

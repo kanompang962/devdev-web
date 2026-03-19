@@ -1,0 +1,34 @@
+<div class="dashboard-page">
+
+  <header class="dashboard-page__header">
+    <h1 class="dashboard-page__title">Dashboard</h1>
+    <p class="dashboard-page__subtitle">ภาพรวมระบบทั้งหมด</p>
+  </header>
+
+  @if (store.loadingKpis()) {
+    <div class="dashboard-page__loading">
+      <app-spinner size="lg" />
+    </div>
+  } @else if (store.error()) {
+    <div class="dashboard-page__error">
+      ⚠️ {{ store.error() }}
+    </div>
+  } @else {
+
+    <!-- KPI Grid -->
+    <section class="kpi-grid">
+      @for (card of store.kpis(); track card.id) {
+        <app-kpi-card [card]="card" />
+      }
+    </section>
+
+    <!-- Activity Feed -->
+    <section class="dashboard-page__feed">
+      <app-activity-feed
+        [activities]="store.activities()"
+        [loading]="store.loadingFeed()"
+      />
+    </section>
+
+  }
+</div>

@@ -1,0 +1,77 @@
+<div class="user-form">
+  <div class="user-form__header">
+    <a routerLink="/users" class="back-link">← กลับ</a>
+    <h1 class="user-form__title">
+      {{ isEditMode() ? 'แก้ไขผู้ใช้งาน' : 'เพิ่มผู้ใช้งานใหม่' }}
+    </h1>
+  </div>
+
+  @if (loading()) {
+    <div class="user-form__loading"><app-spinner size="lg" /></div>
+  } @else {
+    <div class="user-form__card">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+        <div class="form-row">
+          <div class="form-group" [class.form-group--error]="f('firstName').invalid && f('firstName').touched">
+            <label class="form-label">ชื่อ *</label>
+            <input class="form-control" formControlName="firstName" placeholder="ชื่อจริง" />
+            @if (f('firstName').invalid && f('firstName').touched) {
+              <span class="form-error">{{ getError(f('firstName')) }}</span>
+            }
+          </div>
+          <div class="form-group" [class.form-group--error]="f('lastName').invalid && f('lastName').touched">
+            <label class="form-label">นามสกุล *</label>
+            <input class="form-control" formControlName="lastName" placeholder="นามสกุล" />
+            @if (f('lastName').invalid && f('lastName').touched) {
+              <span class="form-error">{{ getError(f('lastName')) }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-group" [class.form-group--error]="f('email').invalid && f('email').touched">
+          <label class="form-label">อีเมล *</label>
+          <input class="form-control" type="email" formControlName="email" placeholder="email@company.com" />
+          @if (f('email').invalid && f('email').touched) {
+            <span class="form-error">{{ getError(f('email')) }}</span>
+          }
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">บทบาท *</label>
+            <select class="form-control" formControlName="role">
+              <option value="VIEWER">Viewer</option>
+              <option value="USER">User</option>
+              <option value="MANAGER">Manager</option>
+              <option value="ADMIN">Admin</option>
+              <option value="SUPER_ADMIN">Super Admin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">แผนก</label>
+            <input class="form-control" formControlName="department" placeholder="แผนก" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">เบอร์โทร</label>
+          <input class="form-control" formControlName="phone" placeholder="0812345678" />
+        </div>
+
+        @if (error()) {
+          <div class="alert alert--error">⚠️ {{ error() }}</div>
+        }
+
+        <div class="form-actions">
+          <a routerLink="/users" class="btn btn--secondary">ยกเลิก</a>
+          <button type="submit" class="btn btn--primary" [disabled]="saving()">
+            @if (saving()) { <span class="spinner"></span> กำลังบันทึก... }
+            @else { {{ isEditMode() ? 'บันทึกการแก้ไข' : 'เพิ่มผู้ใช้งาน' }} }
+          </button>
+        </div>
+
+      </form>
+    </div>
+  }
+</div>

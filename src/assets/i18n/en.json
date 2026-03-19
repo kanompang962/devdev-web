@@ -1,0 +1,30 @@
+{
+  "COMMON": {
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "CREATE": "Create",
+    "SEARCH": "Search",
+    "LOADING": "Loading...",
+    "CONFIRM": "Confirm",
+    "BACK": "Back"
+  },
+  "AUTH": {
+    "LOGIN": "Login",
+    "LOGOUT": "Logout",
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "WELCOME": "Welcome, {{name}}"
+  },
+  "USERS": {
+    "TITLE": "User Management",
+    "CREATE": "Create User",
+    "STATUS": {
+      "ACTIVE": "Active",
+      "INACTIVE": "Inactive",
+      "PENDING": "Pending",
+      "SUSPENDED": "Suspended"
+    }
+  }
+}

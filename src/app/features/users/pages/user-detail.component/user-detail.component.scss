@@ -1,0 +1,52 @@
+.user-detail {
+  padding: 1.5rem;
+  max-width: 800px;
+
+  &__back    { margin-bottom: 1.5rem; }
+  &__loading { display: flex; justify-content: center; padding: 4rem; }
+  &__error   { padding: 1rem; background: #fef2f2; border: 1px solid #fecaca;
+               border-radius: 8px; color: #991b1b; }
+  &__card    { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; }
+}
+
+.back-link {
+  color: #3b82f6; text-decoration: none; font-size: 0.875rem;
+  &:hover { text-decoration: underline; }
+}
+
+.user-profile {
+  display: flex; align-items: center; gap: 1.25rem;
+  padding: 2rem; border-bottom: 1px solid #f1f5f9; flex-wrap: wrap;
+
+  &__avatar {
+    width: 4rem; height: 4rem; border-radius: 50%;
+    background: #dbeafe; color: #1e40af;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.25rem; font-weight: 700; flex-shrink: 0;
+  }
+
+  &__info { flex: 1; }
+  &__name  { font-size: 1.25rem; font-weight: 700; color: #1e293b; margin: 0 0 0.25rem; }
+  &__email { font-size: 0.875rem; color: #64748b; margin: 0 0 0.5rem; }
+}
+
+.detail-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0; padding: 1.5rem;
+}
+
+.detail-item {
+  padding: 0.75rem;
+
+  &__label { font-size: 0.75rem; color: #64748b; margin: 0 0 0.25rem;
+             text-transform: uppercase; letter-spacing: 0.05em; }
+  &__value { font-size: 0.875rem; font-weight: 500; color: #1e293b; margin: 0; }
+}
+
+.btn {
+  display: inline-flex; align-items: center; padding: 0.5rem 1.25rem;
+  border: 1px solid #d1d5db; border-radius: 6px; background: #fff;
+  color: #374151; font-size: 0.875rem; font-weight: 500;
+  text-decoration: none; cursor: pointer; transition: all 0.15s;
+  &--secondary:hover { background: #f9fafb; }
+}

@@ -1,0 +1,95 @@
+<div class="login-wrapper">
+  <div class="login-card">
+
+    <div class="login-card__header">
+      <div class="login-card__logo">🏢</div>
+      <h1 class="login-card__title">เข้าสู่ระบบ</h1>
+      <p class="login-card__subtitle">Enterprise Management System</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+      <!-- Email -->
+      <div class="form-group" [class.form-group--error]="email.invalid && email.touched">
+        <label class="form-label" for="email">อีเมล</label>
+        <input
+          id="email"
+          type="email"
+          class="form-control"
+          formControlName="email"
+          placeholder="email@company.com"
+          autocomplete="email"
+        />
+        @if (email.touched && email.hasError('required')) {
+          <span class="form-error">กรุณากรอกอีเมล</span>
+        }
+        @if (email.touched && email.hasError('email')) {
+          <span class="form-error">รูปแบบอีเมลไม่ถูกต้อง</span>
+        }
+      </div>
+
+      <!-- Password -->
+      <div class="form-group" [class.form-group--error]="password.invalid && password.touched">
+        <label class="form-label" for="password">รหัสผ่าน</label>
+        <div class="input-wrapper">
+          <input
+            id="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            class="form-control"
+            formControlName="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
+          <button
+            type="button"
+            class="input-wrapper__toggle"
+            (click)="togglePassword()"
+            [attr.aria-label]="showPassword() ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'"
+          >
+            {{ showPassword() ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        @if (password.touched && password.hasError('required')) {
+          <span class="form-error">กรุณากรอกรหัสผ่าน</span>
+        }
+        @if (password.touched && password.hasError('minlength')) {
+          <span class="form-error">รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร</span>
+        }
+      </div>
+
+      <!-- Remember Me -->
+      <div class="form-check">
+        <input id="rememberMe" type="checkbox" class="form-check__input" formControlName="rememberMe" />
+        <label for="rememberMe" class="form-check__label">จดจำการเข้าสู่ระบบ</label>
+      </div>
+
+      <!-- Error Message -->
+      @if (errorMessage()) {
+        <div class="alert alert--error" role="alert">
+          ⚠️ {{ errorMessage() }}
+        </div>
+      }
+
+      <!-- Submit -->
+       <app-button type="submit" [fullWidth]="true">
+         @if (loading()) {
+          <span class="spinner"></span> กำลังเข้าสู่ระบบ...
+        } @else {
+          เข้าสู่ระบบ
+        }
+       </app-button>
+      <!-- <button
+        type="submit"
+        class="btn btn--primary btn--full"
+        [disabled]="loading()"
+      >
+        @if (loading()) {
+          <span class="spinner"></span> กำลังเข้าสู่ระบบ...
+        } @else {
+          เข้าสู่ระบบ
+        }
+      </button> -->
+
+    </form>
+  </div>
+</div>

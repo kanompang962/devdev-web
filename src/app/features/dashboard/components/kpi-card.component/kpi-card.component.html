@@ -1,0 +1,11 @@
+<div class="kpi-card">
+  <div class="kpi-card__icon">{{ card().icon }}</div>
+  <div class="kpi-card__body">
+    <p class="kpi-card__label">{{ card().label }}</p>
+    <p class="kpi-card__value">{{ formattedValue() }}</p>
+    <div class="kpi-card__trend" [ngClass]="trendClass()">
+      <span>{{ trendIcon() }}</span>
+      <span>{{ card().change > 0 ? '+' : '' }}{{ card().change }}% จากเดือนก่อน</span>
+    </div>
+  </div>
+</div>

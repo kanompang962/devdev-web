@@ -1,4 +1,4 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files
 
 # Compiled output
 /dist
@@ -10,6 +10,7 @@
 /node_modules
 npm-debug.log
 yarn-error.log
+.pnp.*
 
 # IDEs and editors
 .idea/
@@ -40,3 +41,96 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# ── เพิ่มส่วนนี้ ──────────────────────────────
+
+# Environment files (ห้าม commit ลับ config เด็ดขาด)
+.env
+.env.local
+.env.development
+.env.staging
+.env.production
+*.env
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Test coverage
+/coverage
+.nyc_output
+
+# Storybook
+storybook-static/
+
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ── Compiled Output ────────────────────────────
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# ── Node ───────────────────────────────────────
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# ── Angular ────────────────────────────────────
+/.angular/cache
+.sass-cache/
+
+# ── Environment (ห้าม commit เด็ดขาด) ──────────
+.env
+.env.*
+!.env.example        # ← เก็บ template ไว้ให้ทีม
+
+# ── IDE ────────────────────────────────────────
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+.history/
+
+# ── Test & Coverage ────────────────────────────
+/coverage
+.nyc_output
+
+# ── Cache ──────────────────────────────────────
+.cache/
+.eslintcache
+.stylelintcache
+
+# ── Logs ───────────────────────────────────────
+logs/
+*.log
+
+# ── OS ─────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Misc ───────────────────────────────────────
+/connect.lock
+/libpeerconnection.log
+testem.log
+/typings
+storybook-static/

@@ -1,0 +1,58 @@
+<div class="user-detail">
+  <div class="user-detail__back">
+    <a routerLink="/users" class="back-link">← กลับรายการผู้ใช้งาน</a>
+  </div>
+
+  @if (loading()) {
+    <div class="user-detail__loading"><app-spinner size="lg" /></div>
+  } @else if (error()) {
+    <div class="user-detail__error">⚠️ {{ error() }}</div>
+  } @else if (user()) {
+    <div class="user-detail__card">
+      <div class="user-profile">
+        <div class="user-profile__avatar">
+          {{ user()!.firstName[0] }}{{ user()!.lastName[0] }}
+        </div>
+        <div class="user-profile__info">
+          <h1 class="user-profile__name">{{ user()!.name }}</h1>
+          <p class="user-profile__email">{{ user()!.email }}</p>
+          <app-badge [variant]="STATUS_VARIANT[user()!.status]" [dot]="true">
+            {{ STATUS_LABEL[user()!.status] }}
+          </app-badge>
+        </div>
+        <a [routerLink]="['..', user()!.id, 'edit']" class="btn btn--secondary">
+          แก้ไขข้อมูล
+        </a>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <p class="detail-item__label">บทบาท</p>
+          <p class="detail-item__value">{{ user()!.role }}</p>
+        </div>
+        <div class="detail-item">
+          <p class="detail-item__label">แผนก</p>
+          <p class="detail-item__value">{{ user()!.department ?? '—' }}</p>
+        </div>
+        <div class="detail-item">
+          <p class="detail-item__label">เบอร์โทร</p>
+          <p class="detail-item__value">{{ user()!.phone ?? '—' }}</p>
+        </div>
+        <div class="detail-item">
+          <p class="detail-item__label">วันที่สร้าง</p>
+          <p class="detail-item__value">{{ formatDate(user()!.createdAt) }}</p>
+        </div>
+        <div class="detail-item">
+          <p class="detail-item__label">อัปเดตล่าสุด</p>
+          <p class="detail-item__value">{{ formatDate(user()!.updatedAt) }}</p>
+        </div>
+        <div class="detail-item">
+          <p class="detail-item__label">เข้าสู่ระบบล่าสุด</p>
+          <p class="detail-item__value">
+            {{ user()!.lastLoginAt ? formatDate(user()!.lastLoginAt!) : '—' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+</div>

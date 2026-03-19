@@ -1,0 +1,39 @@
+<div [ngClass]="containerClasses()">
+  @if (label()) {
+    <label class="form-label" [for]="id()">{{ label() }}</label>
+  }
+
+  <div class="input-wrapper">
+    <input
+      [id]="id()"
+      [type]="inputType()"
+      class="form-control"
+      [formControl]="control()"
+      [placeholder]="placeholder()"
+      [class.form-control--password]="type() === 'password'"
+    />
+
+    @if (type() === 'password') {
+      <button
+        type="button"
+        class="input-wrapper__toggle"
+        (click)="togglePassword()"
+        [attr.aria-label]="showPassword() ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'"
+      >
+        {{ showPassword() ? '🙈' : '👁️' }}
+      </button>
+    }
+  </div>
+
+  @if (control().touched && control().invalid) {
+    <div class="form-error">
+      @if (control().hasError('required')) { <span>กรุณากรอกข้อมูลนี้</span> }
+      @if (control().hasError('email')) { <span>รูปแบบอีเมลไม่ถูกต้อง</span> }
+      @if (control().hasError('minlength')) { 
+        <span>ต้องมีอย่างน้อย {{ control().errors?.['minlength'].requiredLength }} ตัวอักษร</span> 
+      }
+    </div>
+  } @else if (hint()) {
+    <span class="form-hint">{{ hint() }}</span>
+  }
+</div>

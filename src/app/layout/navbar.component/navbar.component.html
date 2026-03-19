@@ -1,0 +1,82 @@
+<header class="navbar">
+
+  <div class="navbar__left">
+    <button class="navbar__menu-btn" (click)="menuClick.emit()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="navbar__right">
+
+    <!-- Dark mode toggle -->
+    <button
+      class="navbar__icon-btn"
+      (click)="theme.toggleDark()"
+      [attr.aria-label]="theme.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+      [title]="theme.isDark() ? 'Light mode' : 'Dark mode'"
+    >
+      {{ theme.isDark() ? '☀️' : '🌙' }}
+    </button>
+
+    <!-- Notifications -->
+    <button class="navbar__icon-btn" aria-label="การแจ้งเตือน">🔔</button>
+
+    <!-- User dropdown -->
+    <div class="user-menu" appClickOutside (clickOutside)="closeDropdown()">
+      <button class="user-menu__trigger" (click)="toggleDropdown()">
+        <div class="user-menu__avatar">
+          {{ auth.displayName().charAt(0) }}
+        </div>
+        <div class="user-menu__info">
+          <span class="user-menu__name">{{ auth.displayName() }}</span>
+          <span class="user-menu__role">{{ auth.currentRoles()[0] }}</span>
+        </div>
+        <span class="user-menu__chevron" [class.user-menu__chevron--open]="dropdownOpen()">
+          ▾
+        </span>
+      </button>
+
+      @if (dropdownOpen()) {
+        <div class="user-menu__dropdown">
+          <div class="user-menu__dropdown-header">
+            <p class="user-menu__dropdown-name">{{ auth.displayName() }}</p>
+            <p class="user-menu__dropdown-email">{{ auth.user()?.email }}</p>
+          </div>
+          <div class="user-menu__dropdown-divider"></div>
+
+          <!-- Theme selector -->
+          <div class="theme-selector">
+            <button
+              class="theme-selector__btn"
+              [class.theme-selector__btn--active]="theme.theme() === 'light'"
+              (click)="theme.setTheme('light')"
+            >☀️ Light</button>
+            <button
+              class="theme-selector__btn"
+              [class.theme-selector__btn--active]="theme.theme() === 'dark'"
+              (click)="theme.setTheme('dark')"
+            >🌙 Dark</button>
+            <button
+              class="theme-selector__btn"
+              [class.theme-selector__btn--active]="theme.theme() === 'system'"
+              (click)="theme.setTheme('system')"
+            >💻 Auto</button>
+          </div>
+
+          <div class="user-menu__dropdown-divider"></div>
+          <a routerLink="/profile" class="user-menu__dropdown-item" (click)="closeDropdown()">
+            👤 โปรไฟล์
+          </a>
+          <a routerLink="/settings" class="user-menu__dropdown-item" (click)="closeDropdown()">
+            ⚙️ ตั้งค่า
+          </a>
+          <div class="user-menu__dropdown-divider"></div>
+          <button class="user-menu__dropdown-item user-menu__dropdown-item--danger" (click)="logout()">
+            🚪 ออกจากระบบ
+          </button>
+        </div>
+      }
+    </div>
+
+  </div>
+</header>

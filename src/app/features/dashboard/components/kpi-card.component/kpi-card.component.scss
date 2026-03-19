@@ -1,0 +1,33 @@
+.kpi-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  transition: box-shadow 0.2s;
+
+  &:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+
+  &__icon  { font-size: 2rem; line-height: 1; }
+  &__body  { flex: 1; min-width: 0; }
+  &__label { font-size: 0.8rem; color: #64748b; margin: 0 0 0.25rem; }
+  &__value { font-size: 1.75rem; font-weight: 700; color: #1e293b; margin: 0 0 0.5rem; }
+
+  &__trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+  }
+}
+
+.trend {
+  &--up   { background: #dcfce7; color: #166534; }
+  &--down { background: #fee2e2; color: #991b1b; }
+  &--flat { background: #f1f5f9; color: #475569; }
+}
