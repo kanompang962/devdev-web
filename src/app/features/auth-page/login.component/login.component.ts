@@ -22,7 +22,7 @@ export class LoginComponent {
   readonly showPassword = signal(false);
 
   readonly form = this.fb.group({
-    email:      ['john@mail.com', [Validators.required, Validators.email]],
+    email:      ['admin@email.com', [Validators.required, Validators.email]],
     password:   ['1', [Validators.required, Validators.minLength(1)]],
     rememberMe: [false],
   });

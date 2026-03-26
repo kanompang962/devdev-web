@@ -10,21 +10,80 @@
 
   <!-- Navigation -->
   <nav class="sidebar__nav">
-    @for (item of navItems(); track item.route) {
-      
-    <a [routerLink]="item.route"
-        routerLinkActive="sidebar__nav-item--active"
-        class="sidebar__nav-item"
-        [title]="collapsed() ? item.label : ''"
-      >
-        <span class="sidebar__nav-icon">{{ item.icon }}</span>
-        @if (!collapsed()) {
-          <span class="sidebar__nav-label">{{ item.label }}</span>
-          @if (item.badge) {
-            <span class="sidebar__nav-badge">{{ item.badge }}</span>
+
+    @if (menus().length === 0) {
+      <!-- Loading skeleton -->
+      @for (i of [1,2,3,4]; track i) {
+        <div class="sidebar__skeleton">
+          <div class="skeleton skeleton--icon"></div>
+          @if (!collapsed()) {
+            <div class="skeleton skeleton--label"></div>
           }
-        }
-      </a>
+        </div>
+      }
+    }
+
+    @for (item of menus(); track item.id) {
+
+      @if (hasChildren(item)) {
+        <!-- Parent item with children -->
+        <div class="sidebar__group">
+          <button
+            class="sidebar__nav-item sidebar__nav-item--parent"
+            [class.sidebar__nav-item--expanded]="isExpanded(item.id)"
+            (click)="toggleExpand(item.id)"
+            [title]="collapsed() ? item.name : ''"
+          >
+            <lucide-icon
+              [name]="resolveIcon(item.icon)"
+              [size]="18"
+              class="sidebar__nav-icon"
+            />
+            @if (!collapsed()) {
+              <span class="sidebar__nav-label">{{ item.name }}</span>
+              <span class="sidebar__nav-arrow"
+                [class.sidebar__nav-arrow--open]="isExpanded(item.id)">
+                ›
+              </span>
+            }
+          </button>
+
+          <!-- Children -->
+          @if (isExpanded(item.id) && !collapsed()) {
+            <div class="sidebar__children">
+              @for (child of item.children; track child.id) {
+                <a
+                  [routerLink]="child.path"
+                  routerLinkActive="sidebar__child-item--active"
+                  class="sidebar__child-item"
+                >
+                  <span class="sidebar__child-dot"></span>
+                  <span class="sidebar__nav-label">{{ child.name }}</span>
+                </a>
+              }
+            </div>
+          }
+        </div>
+
+      } @else {
+        <!-- Single item -->
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="sidebar__nav-item--active"
+          class="sidebar__nav-item"
+          [title]="collapsed() ? item.name : ''"
+        >
+          <lucide-icon
+            [name]="resolveIcon(item.icon)"
+            [size]="18"
+            class="sidebar__nav-icon"
+          />
+          @if (!collapsed()) {
+            <span class="sidebar__nav-label">{{ item.name }}</span>
+          }
+        </a>
+      }
+
     }
   </nav>
 

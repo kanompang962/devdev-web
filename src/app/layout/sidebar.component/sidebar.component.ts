@@ -1,46 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '@core/auth/auth.service';
-
-export interface NavItem {
-  label:       string;
-  icon:        string;
-  route:       string;
-  permission?: string;
-  roles?:      string[];
-  badge?:      string;
-  children?:   NavItem[];
-}
-
-const NAV_ITEMS: NavItem[] = [
-  {
-    label: 'Dashboard',
-    icon:  '📊',
-    route: '/dashboard',
-  },
-  {
-    label: 'ผู้ใช้งาน',
-    icon:  '👥',
-    route: '/users',
-    roles: ['ADMIN', 'SUPER_ADMIN'],
-  },
-  {
-    label: 'รายงาน',
-    icon:  '📈',
-    route: '/reports',
-    roles: ['ADMIN', 'SUPER_ADMIN', 'MANAGER'],
-  },
-  {
-    label: 'ตั้งค่า',
-    icon:  '⚙️',
-    route: '/settings',
-    roles: ['ADMIN', 'SUPER_ADMIN'],
-  },
-];
+import { MenuItem, MenuService, resolveIcon } from '@core/services/menu.service';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
@@ -49,12 +15,57 @@ export class SidebarComponent {
   collapsed      = input(false);
   toggleCollapse = output<void>();
 
-  private readonly auth = inject(AuthService);
+  private readonly menuService = inject(MenuService);
+  readonly expandedIds = signal<Set<number>>(new Set());
+  readonly resolveIcon = resolveIcon;
 
-  readonly navItems = computed(() =>
-    NAV_ITEMS.filter((item) => {
-      if (!item.roles?.length) return true;
-      return item.roles.some((r) => this.auth.hasRole(r as any));
-    }),
-  );
+  // โหลด menus จาก API → signal
+  readonly menus = toSignal(this.menuService.getMyMenus(), {
+    initialValue: [],
+  });
+
+  constructor() {
+    // watch menus เมื่อโหลดเสร็จ → set default expanded
+    effect(() => {
+      const menus = this.menus();
+      if (menus.length === 0) return;
+
+      const ids = new Set<number>(
+        menus
+          .filter((item) => item.children.length > 0)
+          .map((item) => item.id),
+      );
+      this.expandedIds.set(ids);
+    });
+  }
+
+  isExpanded(id: number): boolean {
+    return this.expandedIds().has(id);
+  }
+
+  toggleExpand(id: number): void {
+    // ถ้า collapsed อยู่ → ขยาย sidebar ก่อนแล้วค่อย expand
+    if (this.collapsed()) {
+      this.toggleCollapse.emit(); // ขยาย sidebar
+      // หน่วงเล็กน้อยให้ animation เสร็จก่อน
+      setTimeout(() => {
+        this.expandedIds.update((set) => {
+          const next = new Set(set);
+          next.add(id);
+          return next;
+        });
+      }, 50);
+      return;
+    }
+
+    this.expandedIds.update((set) => {
+      const next = new Set(set);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  hasChildren(item: MenuItem): boolean {
+    return item.children.length > 0;
+  }
 }

@@ -11,7 +11,7 @@ import { SidebarComponent } from '@layout/sidebar.component/sidebar.component';
   styleUrl: './shell.component.scss',
 })
 export class ShellComponent {
-  readonly sidebarCollapsed = signal(false);
+  readonly sidebarCollapsed = signal(true);
 
   toggleSidebar(): void {
     this.sidebarCollapsed.update((v) => !v);
